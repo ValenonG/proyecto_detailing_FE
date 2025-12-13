@@ -26,9 +26,15 @@ api.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Token inválido o expirado
-      localStorage.removeItem('token');
-      window.location.href = '/login';
+      // Evitar loop de redirección si el error viene del login o register
+      const isAuthRequest = error.config?.url?.includes('/login') || error.config?.url?.includes('/register');
+      
+      if (!isAuthRequest) {
+        // Token inválido o expirado
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        window.location.href = '/login';
+      }
     }
     return Promise.reject(error);
   }
