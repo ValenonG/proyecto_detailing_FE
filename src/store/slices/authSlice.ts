@@ -9,8 +9,18 @@ interface AuthState {
   error: string | null;
 }
 
+const getUserFromStorage = (): User | null => {
+  try {
+    const userStr = localStorage.getItem('user');
+    return userStr ? JSON.parse(userStr) : null;
+  } catch {
+    localStorage.removeItem('user');
+    return null;
+  }
+};
+
 const initialState: AuthState = {
-  user: null,
+  user: getUserFromStorage(),
   token: localStorage.getItem('token'),
   isAuthenticated: !!localStorage.getItem('token'),
   loading: false,
