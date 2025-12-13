@@ -1,12 +1,12 @@
 import { Navigate } from 'react-router-dom';
-import { authService } from '../services';
+import { useAppSelector } from '../store/hooks';
 
 interface ProtectedRouteProps {
   children: React.ReactNode;
 }
 
 function ProtectedRoute({ children }: ProtectedRouteProps) {
-  const isAuthenticated = authService.isAuthenticated();
+  const { isAuthenticated } = useAppSelector((state) => state.auth);
 
   if (!isAuthenticated) {
     return <Navigate to="/login" replace />;
