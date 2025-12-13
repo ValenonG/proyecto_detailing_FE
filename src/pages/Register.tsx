@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import { useNavigate, Link } from 'react-router-dom';
 import { registerSchema } from '../validations/auth.validation';
-import { RegisterRequest } from '../types/auth.types';
+import type { RegisterRequest } from '../types/auth.types';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { registerStart, registerSuccess, registerFailure } from '../store/slices/authSlice';
 import authService from '../services/authService';
