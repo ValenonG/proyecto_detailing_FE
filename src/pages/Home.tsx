@@ -100,24 +100,26 @@ function Home() {
               </div>
             )}
 
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {tareas.map((tarea, index) => (
-                <div key={tarea._id} className="bg-slate-700 p-6 rounded-lg hover:bg-slate-600 transition-colors">
-                  {getIconForService(index)}
-                  <h4 className="text-xl font-semibold mb-3">{tarea.descripcion}</h4>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex items-center gap-2 text-slate-300">
-                      <DollarSign size={16} className="text-green-400" />
-                      <span className="font-medium">${tarea.precio.toLocaleString()}</span>
-                    </div>
-                    <div className="flex items-center gap-2 text-slate-300">
-                      <Timer size={16} className="text-blue-400" />
-                      <span>{tarea.tiempo_estimado} minutos</span>
+            {!loading && !error && Array.isArray(tareas) && tareas.length > 0 && (
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+                {tareas.map((tarea, index) => (
+                  <div key={tarea._id} className="bg-slate-700 p-6 rounded-lg hover:bg-slate-600 transition-colors">
+                    {getIconForService(index)}
+                    <h4 className="text-xl font-semibold mb-3">{tarea.descripcion}</h4>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex items-center gap-2 text-slate-300">
+                        <DollarSign size={16} className="text-green-400" />
+                        <span className="font-medium">${tarea.precio.toLocaleString()}</span>
+                      </div>
+                      <div className="flex items-center gap-2 text-slate-300">
+                        <Timer size={16} className="text-blue-400" />
+                        <span>{tarea.tiempo_estimado} minutos</span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
+            )}
           </div>
         </section>
 
