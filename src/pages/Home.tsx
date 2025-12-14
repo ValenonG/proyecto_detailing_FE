@@ -1,7 +1,37 @@
 import { Link } from 'react-router-dom';
-import { Car, Sparkles, Shield, Clock } from 'lucide-react';
+import { Car, Sparkles, Shield, Clock, DollarSign, Timer } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { tareaService, type Tarea } from '../services';
 
 function Home() {
+  const [tareas, setTareas] = useState<Tarea[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchTareas = async () => {
+      try {
+        setLoading(true);
+        const data = await tareaService.getAll();
+        setTareas(data);
+        setError(null);
+      } catch (err) {
+        console.error('Error al cargar servicios:', err);
+        setError('No se pudieron cargar los servicios');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTareas();
+  }, []);
+
+  const getIconForService = (index: number) => {
+    const icons = [Sparkles, Shield, Car, Clock];
+    const Icon = icons[index % icons.length];
+    return <Icon className="text-blue-500 mb-4" size={40} />;
+  };
+
   return (
     <div className="min-h-screen bg-slate-900 text-white">
       <nav className="bg-slate-800 border-b border-slate-700">
@@ -32,10 +62,10 @@ function Home() {
       <main>
         <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
           <div className="text-center">
-            <h2 className="text-5xl font-bold mb-6">
+            <h2 className="text-4xl sm:text-5xl font-bold mb-6">
               Servicios de Detailing Profesional
             </h2>
-            <p className="text-xl text-slate-400 mb-8 max-w-2xl mx-auto">
+            <p className="text-lg sm:text-xl text-slate-400 mb-8 max-w-2xl mx-auto">
               Cuidamos tu vehículo con los mejores productos y técnicas del mercado.
               Lavado, pulido, cerámico y mucho más.
             </p>
@@ -51,35 +81,42 @@ function Home() {
         <section className="bg-slate-800 py-16">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <h3 className="text-3xl font-bold text-center mb-12">Nuestros Servicios</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              <div className="bg-slate-700 p-6 rounded-lg">
-                <Sparkles className="text-blue-500 mb-4" size={40} />
-                <h4 className="text-xl font-semibold mb-2">Lavado Premium</h4>
-                <p className="text-slate-400">
-                  Limpieza profunda exterior e interior con productos de alta calidad.
-                </p>
+
+            {loading && (
+              <div className="text-center text-slate-400 py-8">
+                Cargando servicios...
               </div>
-              <div className="bg-slate-700 p-6 rounded-lg">
-                <Shield className="text-blue-500 mb-4" size={40} />
-                <h4 className="text-xl font-semibold mb-2">Tratamiento Cerámico</h4>
-                <p className="text-slate-400">
-                  Protección duradera para la pintura de tu vehículo.
-                </p>
+            )}
+
+            {error && (
+              <div className="text-center text-red-400 py-8 bg-red-500/10 rounded-lg">
+                {error}
               </div>
-              <div className="bg-slate-700 p-6 rounded-lg">
-                <Car className="text-blue-500 mb-4" size={40} />
-                <h4 className="text-xl font-semibold mb-2">Pulido y Encerado</h4>
-                <p className="text-slate-400">
-                  Restauramos el brillo original de tu auto.
-                </p>
+            )}
+
+            {!loading && !error && tareas.length === 0 && (
+              <div className="text-center text-slate-400 py-8">
+                No hay servicios disponibles en este momento.
               </div>
-              <div className="bg-slate-700 p-6 rounded-lg">
-                <Clock className="text-blue-500 mb-4" size={40} />
-                <h4 className="text-xl font-semibold mb-2">Servicio Express</h4>
-                <p className="text-slate-400">
-                  Lavado rápido sin comprometer la calidad.
-                </p>
-              </div>
+            )}
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+              {tareas.map((tarea, index) => (
+                <div key={tarea._id} className="bg-slate-700 p-6 rounded-lg hover:bg-slate-600 transition-colors">
+                  {getIconForService(index)}
+                  <h4 className="text-xl font-semibold mb-3">{tarea.descripcion}</h4>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex items-center gap-2 text-slate-300">
+                      <DollarSign size={16} className="text-green-400" />
+                      <span className="font-medium">${tarea.precio.toLocaleString()}</span>
+                    </div>
+                    <div className="flex items-center gap-2 text-slate-300">
+                      <Timer size={16} className="text-blue-400" />
+                      <span>{tarea.tiempo_estimado} minutos</span>
+                    </div>
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         </section>

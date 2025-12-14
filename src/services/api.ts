@@ -28,9 +28,12 @@ api.interceptors.response.use(
     if (error.response?.status === 401) {
       // Evitar loop de redirección si el error viene del login o register
       const isAuthRequest = error.config?.url?.includes('/login') || error.config?.url?.includes('/register');
-      
-      if (!isAuthRequest) {
-        // Token inválido o expirado
+
+      // Solo redirigir a login si estamos en una ruta protegida
+      const isProtectedRoute = window.location.pathname.startsWith('/dashboard');
+
+      if (!isAuthRequest && isProtectedRoute) {
+        // Token inválido o expirado en ruta protegida
         localStorage.removeItem('token');
         localStorage.removeItem('user');
         window.location.href = '/login';
