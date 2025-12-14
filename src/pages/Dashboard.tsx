@@ -1,99 +1,108 @@
-import { useNavigate } from 'react-router-dom';
-import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { logout } from '../store/slices/authSlice';
-import { LogOut, User } from 'lucide-react';
+import { useEffect, useState } from 'react';
+import { DashboardLayout } from '../components';
+import { StatsCard } from '../components/ui/Card';
+import { Users, Wrench, Package, AlertTriangle } from 'lucide-react';
+import { personaService, trabajoService, productoService } from '../services';
 
 function Dashboard() {
-  const navigate = useNavigate();
-  const dispatch = useAppDispatch();
-  const { user } = useAppSelector((state) => state.auth);
+  const [metrics, setMetrics] = useState({
+    totalClientes: 0,
+    trabajosPendientes: 0,
+    productosStockBajo: 0,
+    loading: true,
+  });
 
-  const handleLogout = () => {
-    dispatch(logout());
-    navigate('/');
-  };
+  useEffect(() => {
+    const fetchMetrics = async () => {
+      try {
+        const [clientes, trabajos, productos] = await Promise.all([
+          personaService.getByTipo('Cliente').catch(() => []),
+          trabajoService.getByEstado('Pendiente').catch(() => []),
+          productoService.getLowStock().catch(() => []),
+        ]);
+
+        setMetrics({
+          totalClientes: clientes.length,
+          trabajosPendientes: trabajos.length,
+          productosStockBajo: productos.length,
+          loading: false,
+        });
+      } catch (error) {
+        console.error('Error al cargar métricas:', error);
+        setMetrics((prev) => ({ ...prev, loading: false }));
+      }
+    };
+
+    fetchMetrics();
+  }, []);
 
   return (
-    <div className="min-h-screen bg-slate-900 text-white">
-      <nav className="bg-slate-800 border-b border-slate-700">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div>
-              <h1 className="text-2xl font-bold">Dashboard</h1>
-            </div>
-            <div className="flex items-center gap-4">
-              {user && (
-                <div className="flex items-center gap-2 text-slate-300">
-                  <User size={20} />
-                  <span>{user.nombre} {user.apellido}</span>
-                  <span className="text-slate-500">|</span>
-                  <span className="text-sm text-slate-400">{user.tipo}</span>
-                </div>
-              )}
-              <button
-                onClick={handleLogout}
-                className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors"
-              >
-                <LogOut size={18} />
-                Cerrar Sesión
-              </button>
+    <DashboardLayout>
+      <div className="space-y-6">
+        <div>
+          <h1 className="text-3xl font-bold text-white mb-2">Dashboard</h1>
+          <p className="text-slate-400">
+            Vista general del estado del negocio
+          </p>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <StatsCard
+            title="Total Clientes"
+            value={metrics.loading ? '...' : metrics.totalClientes}
+            icon={<Users className="text-blue-500" size={24} />}
+          />
+
+          <StatsCard
+            title="Trabajos Pendientes"
+            value={metrics.loading ? '...' : metrics.trabajosPendientes}
+            icon={<Wrench className="text-yellow-500" size={24} />}
+          />
+
+          <StatsCard
+            title="Productos Stock Bajo"
+            value={metrics.loading ? '...' : metrics.productosStockBajo}
+            icon={
+              metrics.productosStockBajo > 0 ? (
+                <AlertTriangle className="text-red-500" size={24} />
+              ) : (
+                <Package className="text-green-500" size={24} />
+              )
+            }
+          />
+        </div>
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="bg-slate-800 rounded-lg p-6 shadow-lg">
+            <h3 className="text-lg font-semibold text-white mb-4">Actividad Reciente</h3>
+            <div className="text-slate-400 text-sm text-center py-8">
+              No hay actividad reciente para mostrar
             </div>
           </div>
-        </div>
-      </nav>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="bg-slate-800 rounded-lg p-6 shadow-lg">
-          <h2 className="text-2xl font-bold mb-4">Bienvenido al Panel de Administración</h2>
-          <p className="text-slate-400 mb-4">
-            Estás autenticado correctamente. Aquí podrás gestionar clientes, vehículos, trabajos y más.
-          </p>
-
-          {user && (
-            <div className="bg-slate-700 rounded-lg p-4 mt-6">
-              <h3 className="text-lg font-semibold mb-3">Información del Usuario</h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-sm">
-                <div>
-                  <span className="text-slate-400">Nombre:</span>{' '}
-                  <span className="font-medium">{user.nombre} {user.apellido}</span>
-                </div>
-                <div>
-                  <span className="text-slate-400">Email:</span>{' '}
-                  <span className="font-medium">{user.email}</span>
-                </div>
-                <div>
-                  <span className="text-slate-400">DNI:</span>{' '}
-                  <span className="font-medium">{user.dni}</span>
-                </div>
-                <div>
-                  <span className="text-slate-400">Rol:</span>{' '}
-                  <span className="font-medium">{user.tipo}</span>
-                </div>
-                {user.telefono && (
+          <div className="bg-slate-800 rounded-lg p-6 shadow-lg">
+            <h3 className="text-lg font-semibold text-white mb-4">Alertas</h3>
+            {metrics.productosStockBajo > 0 ? (
+              <div className="bg-red-500/10 border border-red-500 rounded-lg p-4">
+                <div className="flex items-start gap-3">
+                  <AlertTriangle className="text-red-500 flex-shrink-0" size={20} />
                   <div>
-                    <span className="text-slate-400">Teléfono:</span>{' '}
-                    <span className="font-medium">{user.telefono}</span>
+                    <p className="text-red-400 font-medium">Stock bajo</p>
+                    <p className="text-slate-400 text-sm mt-1">
+                      {metrics.productosStockBajo} producto{metrics.productosStockBajo !== 1 ? 's' : ''} necesita{metrics.productosStockBajo === 1 ? '' : 'n'} reabastecimiento
+                    </p>
                   </div>
-                )}
-                {user.direccion && (
-                  <div>
-                    <span className="text-slate-400">Dirección:</span>{' '}
-                    <span className="font-medium">{user.direccion}</span>
-                  </div>
-                )}
+                </div>
               </div>
-            </div>
-          )}
+            ) : (
+              <div className="text-slate-400 text-sm text-center py-8">
+                No hay alertas en este momento
+              </div>
+            )}
+          </div>
         </div>
-
-        <div className="mt-8 bg-blue-500/10 border border-blue-500 rounded-lg p-6">
-          <h3 className="text-lg font-semibold mb-2">Próximos pasos</h3>
-          <p className="text-slate-300">
-            El CRUD completo para clientes, vehículos, trabajos, productos y servicios se implementará aquí.
-          </p>
-        </div>
-      </main>
-    </div>
+      </div>
+    </DashboardLayout>
   );
 }
 
