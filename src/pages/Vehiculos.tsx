@@ -28,8 +28,13 @@ function Vehiculos() {
     const [clientesMap, setClientesMap] = useState<Record<string, Cliente>>({});
 
     useEffect(() => {
-        loadVehiculos();
-        loadClientes();
+        const loadData = async () => {
+            // Cargar clientes PRIMERO
+            await loadClientes();
+            // Luego cargar vehículos
+            await loadVehiculos();
+        };
+        loadData();
     }, []);
 
     const loadVehiculos = async () => {
@@ -50,7 +55,7 @@ function Vehiculos() {
                 map[cliente._id] = cliente;
             });
             setClientesMap(map);
-        } catch (err) {
+        } catch (err: any) {
             console.error('Error al cargar clientes:', err);
         }
     };
@@ -112,8 +117,22 @@ function Vehiculos() {
             key: 'cliente',
             title: 'Cliente',
             render: (clienteId: string) => {
-                const cliente = clientesMap[clienteId];
-                return cliente ? `${cliente.nombre} ${cliente.apellido}` : 'Cargando...';
+                // Convertir a string si viene como objeto (por populate de MongoDB)
+                const clienteIdStr = typeof clienteId === 'object' && clienteId !== null
+                    ? (clienteId as any)._id || String(clienteId)
+                    : String(clienteId);
+
+                const cliente = clientesMap[clienteIdStr];
+
+                if (cliente) {
+                    return `${cliente.nombre} ${cliente.apellido}`;
+                }
+
+                return (
+                    <span className="text-slate-500 italic">
+                        Cliente no disponible
+                    </span>
+                );
             },
         },
         {
@@ -198,6 +217,8 @@ function Vehiculos() {
                         onSuccess={(newVehiculo: Vehiculo) => {
                             dispatch(addVehiculo(newVehiculo));
                             setIsCreateModalOpen(false);
+                            // Recargar clientes para actualizar el mapa
+                            loadClientes();
                         }}
                     />
                 )}
@@ -215,6 +236,8 @@ function Vehiculos() {
                             dispatch(updateVehiculo(updatedVehiculo));
                             setIsEditModalOpen(false);
                             setVehiculoToEdit(null);
+                            // Recargar clientes para actualizar el mapa
+                            loadClientes();
                         }}
                     />
                 )}
