@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { Home, Login, Register, Dashboard } from '../pages';
+import { Home, Login, Register, Dashboard, Clientes, Vehiculos } from '../pages';
 import { ProtectedRoute } from '../components';
 
 function AppRouter() {
@@ -17,6 +17,22 @@ function AppRouter() {
           element={
             <ProtectedRoute>
               <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard/clientes"
+          element={
+            <ProtectedRoute allowedRoles={['Empleado', 'Administrador']}>
+              <Clientes />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/dashboard/vehiculos"
+          element={
+            <ProtectedRoute allowedRoles={['Empleado', 'Administrador']}>
+              <Vehiculos />
             </ProtectedRoute>
           }
         />

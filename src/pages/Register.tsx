@@ -30,13 +30,21 @@ function Register() {
       setBackendError(null);
       dispatch(registerStart());
 
-      const response = await authService.register(data);
+      await authService.register(data);
+
+      const loginResponse = await authService.login({
+        email: data.email,
+        password: data.password,
+      });
+
+      authService.saveToken(loginResponse.idToken);
+
+      localStorage.setItem('user', JSON.stringify(loginResponse.persona));
 
       dispatch(registerSuccess({
-        user: response.persona,
-        token: response.firebaseUser.uid,
+        user: loginResponse.persona,
+        token: loginResponse.idToken,
       }));
-
       navigate('/dashboard');
     } catch (err: any) {
       const errorMessage = err.response?.data?.message || 'Error al registrarse';
