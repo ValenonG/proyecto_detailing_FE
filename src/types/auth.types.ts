@@ -1,3 +1,5 @@
+export type UserRole = 'Cliente' | 'Empleado' | 'Administrador' | 'Proveedor';
+
 export interface User {
   _id: string;
   nombre: string;
@@ -7,7 +9,7 @@ export interface User {
   telefono?: string;
   direccion?: string;
   cuit?: string;
-  tipo: 'Cliente' | 'Empleado' | 'Administrador' | 'Proveedor';
+  tipo: UserRole;
   firebaseUid: string;
   isActive: boolean;
 }
@@ -26,7 +28,7 @@ export interface RegisterRequest {
   telefono?: string;
   direccion?: string;
   cuit?: string;
-  tipo?: User['tipo']; 
+  tipo?: User['tipo'];
 }
 
 export interface LoginResponse {
@@ -34,7 +36,7 @@ export interface LoginResponse {
   refreshToken: string;
   expiresIn: string;
   localId: string;
-  persona: User; 
+  persona: User;
 }
 
 
@@ -43,5 +45,5 @@ export interface RegisterResponse {
     uid: string;
     email: string;
   };
-  persona: User; 
+  persona: User;
 }

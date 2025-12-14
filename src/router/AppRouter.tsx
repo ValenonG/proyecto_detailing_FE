@@ -23,7 +23,7 @@ function AppRouter() {
         <Route
           path="/dashboard/clientes"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={['Empleado', 'Administrador']}>
               <Clientes />
             </ProtectedRoute>
           }
@@ -31,7 +31,7 @@ function AppRouter() {
         <Route
           path="/dashboard/vehiculos"
           element={
-            <ProtectedRoute>
+            <ProtectedRoute allowedRoles={['Empleado', 'Administrador']}>
               <Vehiculos />
             </ProtectedRoute>
           }
