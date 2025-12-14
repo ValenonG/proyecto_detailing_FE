@@ -6,3 +6,4 @@ export { default as personaService, type Persona } from './personaService';
 export { default as trabajoService, type Trabajo } from './trabajoService';
 export { default as productoService, type Producto } from './productoService';
 export { default as clienteService } from './clienteService';
+export { default as vehiculoService } from './vehiculoService';
