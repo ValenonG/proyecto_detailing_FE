@@ -12,7 +12,7 @@ export interface Tarea {
 export const tareaService = {
   getAll: async (): Promise<Tarea[]> => {
     const response = await api.get('/tarea');
-    return response.data;
+    return response.data.data || response.data;
   },
 
   getById: async (id: string): Promise<Tarea> => {
