@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Car, Sparkles, Shield, Clock, DollarSign, Timer } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { tareaService, Tarea } from '../services';
+import { tareaService, type Tarea } from '../services';
 
 function Home() {
   const [tareas, setTareas] = useState<Tarea[]>([]);
