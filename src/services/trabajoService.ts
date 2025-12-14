@@ -21,7 +21,7 @@ export interface Trabajo {
 export const trabajoService = {
   getAll: async (): Promise<Trabajo[]> => {
     const response = await api.get('/trabajo');
-    return response.data;
+    return response.data.data || response.data;
   },
 
   getById: async (id: string): Promise<Trabajo> => {
@@ -44,8 +44,16 @@ export const trabajoService = {
     return response.data;
   },
 
+  hardDelete: async (id: string): Promise<void> => {
+    await api.delete(`/trabajo/hard/${id}`);
+  },
+
+  softDelete: async (id: string): Promise<void> => {
+    await api.patch(`/trabajo/soft/${id}`);
+  },
+
   delete: async (id: string): Promise<void> => {
-    await api.delete(`/trabajo/${id}`);
+    await api.delete(`/trabajo/hard/${id}`);
   },
 };
 

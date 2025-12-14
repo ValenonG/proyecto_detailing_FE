@@ -30,8 +30,16 @@ export const tareaService = {
     return response.data;
   },
 
+  hardDelete: async (id: string): Promise<void> => {
+    await api.delete(`/tarea/hard/${id}`);
+  },
+
+  softDelete: async (id: string): Promise<void> => {
+    await api.patch(`/tarea/soft/${id}`);
+  },
+
   delete: async (id: string): Promise<void> => {
-    await api.delete(`/tarea/${id}`);
+    await api.delete(`/tarea/hard/${id}`);
   },
 };
 

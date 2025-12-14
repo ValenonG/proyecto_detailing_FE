@@ -14,7 +14,7 @@ export interface Producto {
 export const productoService = {
   getAll: async (): Promise<Producto[]> => {
     const response = await api.get('/producto');
-    return response.data;
+    return response.data.data || response.data;
   },
 
   getById: async (id: string): Promise<Producto> => {
@@ -37,8 +37,16 @@ export const productoService = {
     return response.data;
   },
 
+  hardDelete: async (id: string): Promise<void> => {
+    await api.delete(`/producto/hard/${id}`);
+  },
+
+  softDelete: async (id: string): Promise<void> => {
+    await api.patch(`/producto/soft/${id}`);
+  },
+
   delete: async (id: string): Promise<void> => {
-    await api.delete(`/producto/${id}`);
+    await api.delete(`/producto/hard/${id}`);
   },
 };
 
