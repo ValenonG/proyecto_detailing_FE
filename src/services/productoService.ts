@@ -33,7 +33,7 @@ export const productoService = {
   },
 
   update: async (id: string, producto: Partial<Producto>): Promise<Producto> => {
-    const response = await api.put(`/producto/${id}`, producto);
+    const response = await api.patch(`/producto/${id}`, producto);
     return response.data;
   },
 

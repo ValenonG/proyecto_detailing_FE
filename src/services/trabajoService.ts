@@ -1,15 +1,42 @@
 import api from './api';
 
+export interface Vehiculo {
+  _id: string;
+  marca: string;
+  modelo: string;
+  patente?: string;
+  cliente?: {
+    _id: string;
+    nombre: string;
+    apellido: string;
+    email: string;
+  };
+}
+
+export interface TareaInfo {
+  _id: string;
+  descripcion: string;
+  precio: number;
+  tiempo_estimado: number;
+}
+
+export interface ProductoInfo {
+  _id: string;
+  nombre: string;
+  precio_venta: number;
+  stock_actual: number;
+}
+
 export interface Trabajo {
   _id: string;
-  vehiculo: string | any;
+  vehiculo: string | Vehiculo;
   estado: 'Pendiente' | 'En Proceso' | 'Terminado' | 'Entregado';
   tareas: Array<{
-    tarea_id: string;
+    tarea: string | TareaInfo;
     precio_al_momento: number;
   }>;
   productos_usados: Array<{
-    producto_id: string;
+    producto: string | ProductoInfo;
     cantidad: number;
   }>;
   observaciones?: string;
@@ -40,7 +67,7 @@ export const trabajoService = {
   },
 
   update: async (id: string, trabajo: Partial<Trabajo>): Promise<Trabajo> => {
-    const response = await api.put(`/trabajo/${id}`, trabajo);
+    const response = await api.patch(`/trabajo/${id}`, trabajo);
     return response.data;
   },
 
