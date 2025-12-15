@@ -15,10 +15,8 @@ function ProtectedRoute({ children, allowedRoles }: ProtectedRouteProps) {
     return <Navigate to="/login" replace />;
   }
 
-  // If allowedRoles is specified, check if user has permission
   if (allowedRoles && allowedRoles.length > 0) {
     if (!user || !allowedRoles.includes(user.tipo)) {
-      // User doesn't have permission - redirect to dashboard
       return <Navigate to="/dashboard" replace state={{ from: location }} />;
     }
   }
