@@ -5,6 +5,7 @@ export interface Tarea {
   descripcion: string;
   precio: number;
   tiempo_estimado: number;
+  isActive?: boolean;
   createdAt?: string;
   updatedAt?: string;
 }
@@ -26,7 +27,7 @@ export const tareaService = {
   },
 
   update: async (id: string, tarea: Partial<Tarea>): Promise<Tarea> => {
-    const response = await api.put(`/tarea/${id}`, tarea);
+    const response = await api.patch(`/tarea/${id}`, tarea);
     return response.data;
   },
 
