@@ -9,7 +9,7 @@ import {
     deleteTrabajo,
 } from '../store/slices/trabajosSlice';
 import type { Trabajo } from '../services/trabajoService';
-import { Wrench, Plus, Search, Filter, Eye, Trash2, Edit } from 'lucide-react';
+import { Wrench, Plus, Search, Filter, Eye, Trash2, Edit, AlertTriangle } from 'lucide-react';
 import TrabajoForm from '../components/trabajos/TrabajoForm';
 import TrabajoDetail from '../components/trabajos/TrabajoDetail';
 
@@ -26,6 +26,10 @@ function TrabajosPage() {
     const [showCreateModal, setShowCreateModal] = useState(false);
     const [showDetailModal, setShowDetailModal] = useState(false);
     const [trabajoToEdit, setTrabajoToEdit] = useState<Trabajo | null>(null);
+    const [confirmDelete, setConfirmDelete] = useState<{ show: boolean; trabajo: Trabajo | null }>({
+        show: false,
+        trabajo: null
+    });
 
     useEffect(() => {
         dispatch(fetchTrabajos());
@@ -61,9 +65,14 @@ function TrabajosPage() {
         Entregado: (trabajos || []).filter(t => t.estado === 'Entregado').length,
     };
 
-    const handleDelete = async (id: string) => {
-        if (window.confirm('¿Está seguro de eliminar este trabajo?')) {
-            await dispatch(deleteTrabajo(id));
+    const handleDeleteClick = (trabajo: Trabajo) => {
+        setConfirmDelete({ show: true, trabajo });
+    };
+
+    const handleDeleteConfirm = async () => {
+        if (confirmDelete.trabajo) {
+            await dispatch(deleteTrabajo(confirmDelete.trabajo._id));
+            setConfirmDelete({ show: false, trabajo: null });
         }
     };
 
@@ -215,7 +224,7 @@ function TrabajosPage() {
                                                             <Edit size={18} />
                                                         </button>
                                                         <button
-                                                            onClick={() => handleDelete(trabajo._id)}
+                                                            onClick={() => handleDeleteClick(trabajo)}
                                                             className="p-1.5 hover:bg-red-500/20 text-red-400 rounded transition-colors"
                                                             title="Eliminar"
                                                         >
@@ -246,6 +255,43 @@ function TrabajosPage() {
                 <TrabajoDetail
                     onClose={() => setShowDetailModal(false)}
                 />
+            )}
+
+            {/* Delete Confirmation Modal */}
+            {confirmDelete.show && confirmDelete.trabajo && (
+                <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-[60]">
+                    <div className="bg-slate-800 rounded-lg max-w-md w-full mx-4 shadow-2xl border border-slate-700">
+                        <div className="p-4 border-b border-slate-700 flex items-center gap-3 bg-red-500/10">
+                            <AlertTriangle size={24} className="text-red-500 flex-shrink-0" />
+                            <h3 className="font-bold text-white text-lg">Confirmar Eliminación</h3>
+                        </div>
+
+                        <div className="p-6">
+                            <p className="text-slate-300">
+                                ¿Estás seguro que deseas eliminar la orden de trabajo{' '}
+                                <span className="font-bold text-white">#{String(filteredTrabajos.findIndex(t => t._id === confirmDelete.trabajo?._id) + 1).padStart(4, '0')}</span>?
+                            </p>
+                            <p className="text-slate-400 text-sm mt-2">
+                                Esta acción no se puede deshacer.
+                            </p>
+                        </div>
+
+                        <div className="p-4 border-t border-slate-700 flex justify-end gap-2">
+                            <button
+                                onClick={() => setConfirmDelete({ show: false, trabajo: null })}
+                                className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-colors"
+                            >
+                                Cancelar
+                            </button>
+                            <button
+                                onClick={handleDeleteConfirm}
+                                className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
+                            >
+                                Eliminar
+                            </button>
+                        </div>
+                    </div>
+                </div>
             )}
         </DashboardLayout>
     );
