@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useForm, Controller } from 'react-hook-form';
 import { useAppDispatch } from '../../store/hooks';
 import { createTrabajo, updateTrabajo, fetchTrabajos } from '../../store/slices/trabajosSlice';
-import type { Trabajo, ProductoInfo, TareaInfo } from '../../services/trabajoService';
+import type { Trabajo } from '../../services/trabajoService';
 import { personaService, type Persona } from '../../services/personaService';
 import { tareaService, type Tarea } from '../../services/tareaService';
 import { productoService, type Producto } from '../../services/productoService';
@@ -69,7 +69,6 @@ function TrabajoForm({ trabajo, onClose }: TrabajoFormProps) {
         },
     });
 
-    const vehiculoSeleccionado = watch('vehiculo');
 
     // Cargar datos iniciales
     useEffect(() => {

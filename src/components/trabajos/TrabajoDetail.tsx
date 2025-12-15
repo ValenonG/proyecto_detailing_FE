@@ -1,6 +1,6 @@
 import { useAppSelector, useAppDispatch } from '../../store/hooks';
 import { setSelectedTrabajo, updateTrabajo, fetchTrabajos } from '../../store/slices/trabajosSlice';
-import type { Trabajo, Vehiculo, TareaInfo, ProductoInfo } from '../../services/trabajoService';
+import type { Vehiculo, TareaInfo, ProductoInfo } from '../../services/trabajoService';
 import { X, Calendar, DollarSign, Package, Wrench, AlertCircle, AlertTriangle, CheckCircle } from 'lucide-react';
 import { useState } from 'react';
 
@@ -363,8 +363,8 @@ function TrabajoDetail({ onClose }: TrabajoDetailProps) {
                     <div className="bg-slate-800 rounded-lg max-w-md w-full mx-4 shadow-2xl border border-slate-700">
                         {/* Header con icono según tipo */}
                         <div className={`p-4 border-b border-slate-700 flex items-center gap-3 ${confirmModal.type === 'error' ? 'bg-red-500/10' :
-                                confirmModal.type === 'success' ? 'bg-green-500/10' :
-                                    'bg-blue-500/10'
+                            confirmModal.type === 'success' ? 'bg-green-500/10' :
+                                'bg-blue-500/10'
                             }`}>
                             {confirmModal.type === 'error' && (
                                 <AlertTriangle size={24} className="text-red-500 flex-shrink-0" />
@@ -402,8 +402,8 @@ function TrabajoDetail({ onClose }: TrabajoDetailProps) {
                                     }
                                 }}
                                 className={`px-4 py-2 text-white rounded-lg transition-colors ${confirmModal.type === 'error' ? 'bg-red-600 hover:bg-red-700' :
-                                        confirmModal.type === 'success' ? 'bg-green-600 hover:bg-green-700' :
-                                            'bg-blue-600 hover:bg-blue-700'
+                                    confirmModal.type === 'success' ? 'bg-green-600 hover:bg-green-700' :
+                                        'bg-blue-600 hover:bg-blue-700'
                                     }`}
                             >
                                 {confirmModal.type === 'confirm' ? 'Confirmar' : 'Aceptar'}
