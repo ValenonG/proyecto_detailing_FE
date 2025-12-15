@@ -102,7 +102,7 @@ function Home() {
 
             {!loading && !error && Array.isArray(tareas) && tareas.length > 0 && (
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {tareas.map((tarea, index) => (
+                {tareas.filter(tarea => tarea.isActive !== false).map((tarea, index) => (
                   <div key={tarea._id} className="bg-slate-700 p-6 rounded-lg hover:bg-slate-600 transition-colors">
                     {getIconForService(index)}
                     <h4 className="text-xl font-semibold mb-3">{tarea.descripcion}</h4>
