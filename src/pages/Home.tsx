@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom';
 import { Car, Sparkles, Shield, Clock, DollarSign, Timer, ChevronRight, Star, CheckCircle2 } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { tareaService, type Tarea } from '../services';
+import Mapa from '../components/ui/Mapa';
 
 function Home() {
   const [tareas, setTareas] = useState<Tarea[]>([]);
@@ -25,6 +26,14 @@ function Home() {
 
     fetchTareas();
   }, []);
+
+const handleScrollToServices = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  e.preventDefault();
+  const element = document.getElementById('servicios');
+  if (element) {
+    element.scrollIntoView({ behavior: 'smooth' });
+  }
+};
 
   const getIconForService = (index: number) => {
     const icons = [Sparkles, Shield, Car, Star];
@@ -57,9 +66,7 @@ function Home() {
       </nav>
 
       <main>
-        {/* Hero Section con Imagen de Fondo */}
         <section className="relative h-[85vh] flex items-center justify-center overflow-hidden">
-          {/* Imagen de fondo (puedes cambiar la URL por una propia) */}
           <div className="absolute inset-0 z-0">
             <img 
               src="https://images.unsplash.com/photo-1601362840469-51e4d8d58785?q=80&w=2070&auto=format&fit=crop" 
@@ -91,7 +98,7 @@ function Home() {
                   Reservar Turno
                   <ChevronRight className="ml-2" size={20} />
                 </Link>
-                <a href="#servicios" className="inline-flex items-center justify-center px-8 py-4 rounded-xl text-lg font-medium text-white border border-white/10 hover:bg-white/5 backdrop-blur-sm transition-all">
+                <a href="#servicios" onClick={handleScrollToServices} className="inline-flex items-center justify-center px-8 py-4 rounded-xl text-lg font-medium text-white border border-white/10 hover:bg-white/5 backdrop-blur-sm transition-all cursor-pointer">
                   Ver Servicios
                 </a>
               </div>
@@ -99,8 +106,8 @@ function Home() {
           </div>
         </section>
 
-        {/* Sección de Características (Why Us) */}
-        <section className="py-12 bg-slate-950 border-b border-white/5">
+        {/* Sección de Características*/}
+        <section className="pb-8 bg-slate-950 border-b border-white/5">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {[
@@ -123,7 +130,7 @@ function Home() {
         </section>
 
         {/* Grid de Servicios */}
-        <section id="servicios" className="relative py-24 bg-slate-950">
+        <section id="servicios" className="relative py-18 bg-slate-950">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h3 className="text-3xl sm:text-4xl font-bold mb-4">Nuestros Servicios Exclusivos</h3>
@@ -155,7 +162,6 @@ function Home() {
                     key={tarea._id} 
                     className="group relative bg-slate-900 border border-slate-800 rounded-2xl p-6 hover:border-blue-500/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-blue-500/10"
                   >
-                    {/* Icono con fondo brillante */}
                     <div className="w-14 h-14 bg-slate-800 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-600 transition-colors duration-300 shadow-lg">
                       {getIconForService(index)}
                     </div>
@@ -178,7 +184,6 @@ function Home() {
                         </div>
                       </div>
                       
-                      {/* Botón sutil de acción */}
                       <Link to="/register" className="mt-2 w-full py-2 text-center text-sm font-medium text-slate-400 hover:text-white bg-slate-800/50 hover:bg-blue-600 rounded-lg transition-all">
                         Reservar este
                       </Link>
@@ -190,8 +195,7 @@ function Home() {
           </div>
         </section>
 
-        {/* CTA Final */}
-        <section className="relative py-20 overflow-hidden">
+        <section className="relative py-8 overflow-hidden">
           <div className="absolute inset-0 bg-blue-900/20" />
           <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-transparent to-slate-950" />
           
@@ -207,6 +211,7 @@ function Home() {
             </div>
           </div>
         </section>
+          <Mapa />
       </main>
 
 
