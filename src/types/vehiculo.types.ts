@@ -1,9 +1,9 @@
 export interface Vehiculo {
     _id: string;
-    cliente: string; // ID del cliente propietario
+    cliente: string;
     marca: string;
     modelo: string;
-    patente?: string; // Opcional
+    patente?: string; 
     isActive?: boolean;
     createdAt?: string;
     updatedAt?: string;
@@ -13,7 +13,7 @@ export interface CreateVehiculoRequest {
     cliente: string;
     marca: string;
     modelo: string;
-    patente?: string; // Opcional
+    patente?: string;
 }
 
 export interface UpdateVehiculoRequest {
