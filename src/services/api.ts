@@ -29,7 +29,7 @@ api.interceptors.response.use(
       // Evitar loop de redirección si el error viene del login o register
       const isAuthRequest = error.config?.url?.includes('/login') || error.config?.url?.includes('/register');
 
-      // Solo redirigir a login si estamos en una ruta protegida
+      // Solo redirigir a login si estamos en una ruta protegida (dashboard)
       const isProtectedRoute = window.location.pathname.startsWith('/dashboard');
 
       if (!isAuthRequest && isProtectedRoute) {
