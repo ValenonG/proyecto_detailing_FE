@@ -4,3 +4,4 @@ export { default as Register } from './Register';
 export { default as Dashboard } from './Dashboard';
 export { default as Clientes } from './Clientes';
 export { default as Vehiculos } from './Vehiculos';
+export { default as TrabajosPage } from './TrabajosPage';
