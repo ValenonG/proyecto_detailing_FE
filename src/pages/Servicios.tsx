@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { DashboardLayout } from '../components';
 import { Table } from '../components/ui/Table';
 import { Button } from '../components/ui/Button';
@@ -11,7 +11,6 @@ import { joiResolver } from '@hookform/resolvers/joi';
 import Joi from 'joi';
 import { Input } from '../components/ui/Input';
 import { Label } from '../components/ui/Label';
-import { useAuth } from '../store/hooks';
 
 // Define el esquema de validación para las tareas usando Joi
 const tareaSchema = Joi.object({
@@ -38,8 +37,6 @@ interface TareaFormData {
 }
 
 export function Servicios() {
-  const { user } = useAuth();
-
   const [tareas, setTareas] = useState<Tarea[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
