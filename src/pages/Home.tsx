@@ -222,8 +222,8 @@ const handleScrollToServices = (e: React.MouseEvent<HTMLAnchorElement>) => {
           </div>
           <p className="text-slate-500 text-sm">© 2025 FUTURA DETAILING. Todos los derechos reservados.</p>
           <div className="flex gap-6 text-slate-400">
-            <a href="#" className="hover:text-white transition-colors">Instagram</a>
-            <a href="#" className="hover:text-white transition-colors">Contacto</a>
+            <a href="https://www.instagram.com/futuradetailing/" className="hover:text-white transition-colors">Instagram</a>
+            <a href="https://wa.me/3415081979" className="hover:text-white transition-colors">Contacto</a>
           </div>
         </div>
       </footer>
