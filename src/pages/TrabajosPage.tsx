@@ -9,11 +9,12 @@ import {
     deleteTrabajo,
 } from '../store/slices/trabajosSlice';
 import type { Trabajo } from '../services/trabajoService';
-import { Wrench, Plus, Search, Filter, Eye, Trash2, Edit, AlertTriangle } from 'lucide-react';
+import { Wrench, Plus, Search, Filter, Eye, Trash2, Edit } from 'lucide-react';
 import TrabajoForm from '../components/trabajos/TrabajoForm';
 import TrabajoDetail from '../components/trabajos/TrabajoDetail';
+import { Table, ConfirmModal } from '../components/ui';
 
-const estadoColors = {
+const estadoColors: Record<string, string> = {
     Pendiente: 'bg-yellow-500/10 text-yellow-500 border-yellow-500',
     'En Proceso': 'bg-blue-500/10 text-blue-500 border-blue-500',
     Terminado: 'bg-green-500/10 text-green-500 border-green-500',
@@ -91,6 +92,95 @@ function TrabajosPage() {
         setTrabajoToEdit(null);
     };
 
+    const columns = [
+        {
+            key: '_id',
+            title: '#Orden',
+            render: (_: any, __: any, index: number) => (
+                <span className="font-mono text-white">#{String(index + 1).padStart(4, '0')}</span>
+            )
+        },
+        {
+            key: 'cliente',
+            title: 'Cliente',
+            render: (_: any, trabajo: Trabajo) => {
+                const vehiculo = typeof trabajo.vehiculo === 'object' ? trabajo.vehiculo : null;
+                const cliente = vehiculo?.cliente;
+                return cliente ? `${cliente.nombre} ${cliente.apellido}` : 'N/A';
+            }
+        },
+        {
+            key: 'vehiculo',
+            title: 'Vehículo',
+            render: (_: any, trabajo: Trabajo) => {
+                const vehiculo = typeof trabajo.vehiculo === 'object' ? trabajo.vehiculo : null;
+                return vehiculo ? (
+                    <div>
+                        <div className="font-medium">{vehiculo.marca} {vehiculo.modelo}</div>
+                        <div className="text-sm text-slate-400">{vehiculo.patente || 'Sin patente'}</div>
+                    </div>
+                ) : 'N/A';
+            }
+        },
+        {
+            key: 'estado',
+            title: 'Estado',
+            render: (estado: string) => (
+                <span className={`inline-block px-2 py-1 rounded text-xs font-medium border ${estadoColors[estado] || ''}`}>
+                    {estado}
+                </span>
+            )
+        },
+        {
+            key: 'precio_total',
+            title: 'Precio Total',
+            className: 'text-right',
+            render: (precio: number) => (
+                <div className="text-right font-semibold text-white">
+                    ${precio.toLocaleString()}
+                </div>
+            )
+        },
+        {
+            key: 'actions',
+            title: 'Acciones',
+            render: (_: any, trabajo: Trabajo) => (
+                <div className="flex justify-center gap-2">
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            handleViewDetail(trabajo);
+                        }}
+                        className="p-1.5 hover:bg-blue-500/20 text-blue-400 rounded transition-colors"
+                        title="Ver detalle"
+                    >
+                        <Eye size={18} />
+                    </button>
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            handleEdit(trabajo);
+                        }}
+                        className="p-1.5 hover:bg-green-500/20 text-green-400 rounded transition-colors"
+                        title="Editar"
+                    >
+                        <Edit size={18} />
+                    </button>
+                    <button
+                        onClick={(e) => {
+                            e.stopPropagation();
+                            handleDeleteClick(trabajo);
+                        }}
+                        className="p-1.5 hover:bg-red-500/20 text-red-400 rounded transition-colors"
+                        title="Eliminar"
+                    >
+                        <Trash2 size={18} />
+                    </button>
+                </div>
+            )
+        }
+    ];
+
     return (
         <DashboardLayout>
             <div className="space-y-6">
@@ -156,90 +246,13 @@ function TrabajosPage() {
                 </div>
 
                 {/* Tabla de trabajos */}
-                <div className="bg-slate-800 rounded-lg overflow-hidden shadow-lg">
-                    {loading ? (
-                        <div className="p-8 text-center text-slate-400">
-                            Cargando trabajos...
-                        </div>
-                    ) : filteredTrabajos.length === 0 ? (
-                        <div className="p-8 text-center text-slate-400">
-                            No se encontraron trabajos
-                        </div>
-                    ) : (
-                        <div className="overflow-x-auto">
-                            <table className="w-full">
-                                <thead className="bg-slate-700">
-                                    <tr>
-                                        <th className="px-4 py-3 text-left text-sm font-semibold text-slate-300">#Orden</th>
-                                        <th className="px-4 py-3 text-left text-sm font-semibold text-slate-300">Cliente</th>
-                                        <th className="px-4 py-3 text-left text-sm font-semibold text-slate-300">Vehículo</th>
-                                        <th className="px-4 py-3 text-left text-sm font-semibold text-slate-300">Estado</th>
-                                        <th className="px-4 py-3 text-right text-sm font-semibold text-slate-300">Precio Total</th>
-                                        <th className="px-4 py-3 text-center text-sm font-semibold text-slate-300">Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody className="divide-y divide-slate-700">
-                                    {filteredTrabajos.map((trabajo, index) => {
-                                        const vehiculo = typeof trabajo.vehiculo === 'object' ? trabajo.vehiculo : null;
-                                        const cliente = vehiculo?.cliente;
-
-                                        return (
-                                            <tr key={trabajo._id} className="hover:bg-slate-700/50 transition-colors">
-                                                <td className="px-4 py-3 text-white font-mono">
-                                                    #{String(index + 1).padStart(4, '0')}
-                                                </td>
-                                                <td className="px-4 py-3 text-slate-300">
-                                                    {cliente ? `${cliente.nombre} ${cliente.apellido}` : 'N/A'}
-                                                </td>
-                                                <td className="px-4 py-3 text-slate-300">
-                                                    {vehiculo ? (
-                                                        <div>
-                                                            <div className="font-medium">{vehiculo.marca} {vehiculo.modelo}</div>
-                                                            <div className="text-sm text-slate-400">{vehiculo.patente || 'Sin patente'}</div>
-                                                        </div>
-                                                    ) : 'N/A'}
-                                                </td>
-                                                <td className="px-4 py-3">
-                                                    <span className={`inline-block px-2 py-1 rounded text-xs font-medium border ${estadoColors[trabajo.estado]}`}>
-                                                        {trabajo.estado}
-                                                    </span>
-                                                </td>
-                                                <td className="px-4 py-3 text-right text-white font-semibold">
-                                                    ${trabajo.precio_total.toLocaleString()}
-                                                </td>
-                                                <td className="px-4 py-3">
-                                                    <div className="flex justify-center gap-2">
-                                                        <button
-                                                            onClick={() => handleViewDetail(trabajo)}
-                                                            className="p-1.5 hover:bg-blue-500/20 text-blue-400 rounded transition-colors"
-                                                            title="Ver detalle"
-                                                        >
-                                                            <Eye size={18} />
-                                                        </button>
-                                                        <button
-                                                            onClick={() => handleEdit(trabajo)}
-                                                            className="p-1.5 hover:bg-green-500/20 text-green-400 rounded transition-colors"
-                                                            title="Editar"
-                                                        >
-                                                            <Edit size={18} />
-                                                        </button>
-                                                        <button
-                                                            onClick={() => handleDeleteClick(trabajo)}
-                                                            className="p-1.5 hover:bg-red-500/20 text-red-400 rounded transition-colors"
-                                                            title="Eliminar"
-                                                        >
-                                                            <Trash2 size={18} />
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            </tr>
-                                        );
-                                    })}
-                                </tbody>
-                            </table>
-                        </div>
-                    )}
-                </div>
+                <Table
+                    data={filteredTrabajos}
+                    columns={columns}
+                    keyExtractor={(trabajo) => trabajo._id}
+                    loading={loading}
+                    emptyMessage="No se encontraron trabajos"
+                />
             </div>
 
             {/* Modal de creación/edición */}
@@ -258,41 +271,20 @@ function TrabajosPage() {
             )}
 
             {/* Delete Confirmation Modal */}
-            {confirmDelete.show && confirmDelete.trabajo && (
-                <div className="fixed inset-0 bg-black/70 flex items-center justify-center z-[60]">
-                    <div className="bg-slate-800 rounded-lg max-w-md w-full mx-4 shadow-2xl border border-slate-700">
-                        <div className="p-4 border-b border-slate-700 flex items-center gap-3 bg-red-500/10">
-                            <AlertTriangle size={24} className="text-red-500 flex-shrink-0" />
-                            <h3 className="font-bold text-white text-lg">Confirmar Eliminación</h3>
-                        </div>
-
-                        <div className="p-6">
-                            <p className="text-slate-300">
-                                ¿Estás seguro que deseas eliminar la orden de trabajo{' '}
-                                <span className="font-bold text-white">#{String(filteredTrabajos.findIndex(t => t._id === confirmDelete.trabajo?._id) + 1).padStart(4, '0')}</span>?
-                            </p>
-                            <p className="text-slate-400 text-sm mt-2">
-                                Esta acción no se puede deshacer.
-                            </p>
-                        </div>
-
-                        <div className="p-4 border-t border-slate-700 flex justify-end gap-2">
-                            <button
-                                onClick={() => setConfirmDelete({ show: false, trabajo: null })}
-                                className="px-4 py-2 bg-slate-700 hover:bg-slate-600 text-white rounded-lg transition-colors"
-                            >
-                                Cancelar
-                            </button>
-                            <button
-                                onClick={handleDeleteConfirm}
-                                className="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors"
-                            >
-                                Eliminar
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            )}
+            <ConfirmModal
+                isOpen={confirmDelete.show}
+                onClose={() => setConfirmDelete({ show: false, trabajo: null })}
+                onConfirm={handleDeleteConfirm}
+                title="Confirmar Eliminación"
+                message={
+                    confirmDelete.trabajo 
+                        ? `¿Estás seguro que deseas eliminar la orden de trabajo #${String(filteredTrabajos.findIndex(t => t._id === confirmDelete.trabajo?._id) + 1).padStart(4, '0')}? Esta acción no se puede deshacer.`
+                        : "¿Estás seguro que deseas eliminar esta orden de trabajo?"
+                }
+                confirmText="Eliminar"
+                cancelText="Cancelar"
+                variant="danger"
+            />
         </DashboardLayout>
     );
 }
