@@ -1,5 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
-import { Home, Login, Register, Dashboard, Clientes, Vehiculos, TrabajosPage, ProductosPage, Servicios } from '../pages';
+import { Home, Login, Register, Dashboard, Clientes, Vehiculos, TrabajosPage, ProductosPage, Servicios, Proveedores } from '../pages';
 import { ProtectedRoute } from '../components';
 
 function AppRouter() {
@@ -28,6 +28,13 @@ function AppRouter() {
             </ProtectedRoute>
           }
         />
+        <Route
+          path="/dashboard/proveedores"
+          element={
+            <ProtectedRoute allowedRoles={['Empleado', 'Administrador']}>
+              <Proveedores />
+            </ProtectedRoute>
+          }/>
         <Route
           path="/dashboard/vehiculos"
           element={

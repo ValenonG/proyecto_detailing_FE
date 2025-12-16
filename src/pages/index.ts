@@ -7,3 +7,4 @@ export { default as Vehiculos } from './Vehiculos';
 export { default as TrabajosPage } from './TrabajosPage';
 export { default as ProductosPage } from './ProductosPage';
 export { Servicios } from './Servicios';
+export { default as Proveedores } from './Proveedores';
