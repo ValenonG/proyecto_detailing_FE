@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { loginStart, loginSuccess, loginFailure } from '../store/slices/authSlice';
 import authService from '../services/authService';
 import { useState } from 'react';
-import { Mail, Lock, Car, ArrowLeft, Loader2, AlertCircle } from 'lucide-react';
+import { Mail, Lock, ArrowLeft, Loader2, AlertCircle } from 'lucide-react';
 
 function Login() {
   const navigate = useNavigate();
@@ -46,7 +46,6 @@ function Login() {
   return (
     <div className="min-h-screen relative flex items-center justify-center bg-slate-950 overflow-hidden font-sans">
       
-      {/* Fondo con Imagen y Overlay (Igual que la Home para consistencia) */}
       <div className="absolute inset-0 z-0">
         <img 
           src="https://images.unsplash.com/photo-1601362840469-51e4d8d58785?q=80&w=2070&auto=format&fit=crop" 
@@ -56,27 +55,19 @@ function Login() {
         <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/70 to-slate-900/80" />
       </div>
 
-      {/* Tarjeta de Login Glassmorphism */}
       <div className="relative z-10 w-full max-w-md px-4">
         
-        {/* Botón Volver */}
         <Link to="/" className="inline-flex items-center text-slate-400 hover:text-white transition-colors mb-6 group">
           <ArrowLeft size={20} className="mr-2 group-hover:-translate-x-1 transition-transform" />
           Volver al inicio
         </Link>
 
         <div className="bg-slate-900/60 backdrop-blur-xl border border-white/10 rounded-2xl shadow-2xl p-8">
-          
-          {/* Header del Formulario */}
           <div className="text-center mb-8">
-            <div className="inline-flex justify-center items-center bg-gradient-to-tr from-blue-600 to-cyan-500 p-3 rounded-xl shadow-lg shadow-blue-900/30 mb-4">
-              <Car className="text-white" size={32} />
-            </div>
             <h2 className="text-3xl font-bold text-white tracking-tight">Bienvenido de nuevo</h2>
             <p className="text-slate-400 mt-2 text-sm">Ingresa a tu cuenta para gestionar el taller</p>
           </div>
 
-          {/* Mensajes de Error */}
           {(error || backendError) && (
             <div className="bg-red-500/10 border border-red-500/20 text-red-400 px-4 py-3 rounded-lg mb-6 flex items-start gap-3 text-sm animate-fadeIn">
               <AlertCircle size={18} className="flex-shrink-0 mt-0.5" />
@@ -85,7 +76,6 @@ function Login() {
           )}
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-            {/* Input Email */}
             <div>
               <label htmlFor="email" className="block text-xs font-medium text-slate-300 mb-1.5 uppercase tracking-wide">
                 Correo Electrónico
@@ -107,7 +97,6 @@ function Login() {
               )}
             </div>
 
-            {/* Input Password */}
             <div>
               <label htmlFor="password" className="block text-xs font-medium text-slate-300 mb-1.5 uppercase tracking-wide">
                 Contraseña
@@ -129,7 +118,6 @@ function Login() {
               )}
             </div>
 
-            {/* Botón Submit */}
             <button
               type="submit"
               disabled={loading}
@@ -145,8 +133,6 @@ function Login() {
               )}
             </button>
           </form>
-
-          {/* Footer */}
           <div className="mt-8 text-center pt-6 border-t border-white/5">
             <p className="text-slate-400 text-sm">
               ¿No tienes una cuenta?{' '}
