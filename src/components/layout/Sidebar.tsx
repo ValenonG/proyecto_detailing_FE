@@ -6,7 +6,6 @@ import {
   Wrench,
   Package,
   FileText,
-  Settings,
   ChevronLeft,
   ChevronRight,
   Truck,
