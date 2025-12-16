@@ -27,13 +27,13 @@ function Home() {
     fetchTareas();
   }, []);
 
-const handleScrollToServices = (e: React.MouseEvent<HTMLAnchorElement>) => {
-  e.preventDefault();
-  const element = document.getElementById('servicios');
-  if (element) {
-    element.scrollIntoView({ behavior: 'smooth' });
-  }
-};
+  const handleScrollToServices = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    e.preventDefault();
+    const element = document.getElementById('servicios');
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   const getIconForService = (index: number) => {
     const icons = [Sparkles, Shield, Car, Star];
@@ -43,7 +43,7 @@ const handleScrollToServices = (e: React.MouseEvent<HTMLAnchorElement>) => {
 
   return (
     <div className="min-h-screen bg-slate-950 text-white font-sans selection:bg-blue-500 selection:text-white">
-      
+
       <nav className="fixed w-full z-50 bg-slate-900/80 backdrop-blur-md border-b border-white/5">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-20">
@@ -68,9 +68,9 @@ const handleScrollToServices = (e: React.MouseEvent<HTMLAnchorElement>) => {
       <main>
         <section className="relative h-[85vh] flex items-center justify-center overflow-hidden">
           <div className="absolute inset-0 z-0">
-            <img 
-              src="https://images.unsplash.com/photo-1601362840469-51e4d8d58785?q=80&w=2070&auto=format&fit=crop" 
-              alt="Luxury Car Detailing" 
+            <img
+              src="https://images.unsplash.com/photo-1601362840469-51e4d8d58785?q=80&w=2070&auto=format&fit=crop"
+              alt="Luxury Car Detailing"
               className="w-full h-full object-cover opacity-60"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/80 to-transparent" />
@@ -91,13 +91,15 @@ const handleScrollToServices = (e: React.MouseEvent<HTMLAnchorElement>) => {
                 Transformamos tu auto con técnicas de detailing avanzadas, productos de alta gama y una pasión obsesiva por los detalles.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center sm:justify-start">
-                <Link
-                  to="/register"
+                <a
+                  href="https://wa.me/3415081979?text=Hola!%20Me%20gustaría%20reservar%20un%20turno%20para%20detailing%20de%20mi%20vehículo."
+                  target="_blank"
+                  rel="noopener noreferrer"
                   className="inline-flex items-center justify-center bg-blue-600 hover:bg-blue-500 text-white font-semibold px-8 py-4 rounded-xl text-lg transition-all shadow-lg shadow-blue-600/30 hover:shadow-blue-600/50"
                 >
                   Reservar Turno
                   <ChevronRight className="ml-2" size={20} />
-                </Link>
+                </a>
                 <a href="#servicios" onClick={handleScrollToServices} className="inline-flex items-center justify-center px-8 py-4 rounded-xl text-lg font-medium text-white border border-white/10 hover:bg-white/5 backdrop-blur-sm transition-all cursor-pointer">
                   Ver Servicios
                 </a>
@@ -158,8 +160,8 @@ const handleScrollToServices = (e: React.MouseEvent<HTMLAnchorElement>) => {
             {!loading && !error && Array.isArray(tareas) && tareas.length > 0 && (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                 {tareas.filter(tarea => tarea.isActive !== false).map((tarea, index) => (
-                  <div 
-                    key={tarea._id} 
+                  <div
+                    key={tarea._id}
                     className="group relative bg-slate-900 border border-slate-800 rounded-2xl p-6 hover:border-blue-500/50 transition-all duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-blue-500/10"
                   >
                     <div className="w-14 h-14 bg-slate-800 rounded-xl flex items-center justify-center mb-6 group-hover:bg-blue-600 transition-colors duration-300 shadow-lg">
@@ -169,7 +171,7 @@ const handleScrollToServices = (e: React.MouseEvent<HTMLAnchorElement>) => {
                     <h4 className="text-xl font-bold mb-3 text-white group-hover:text-blue-400 transition-colors">
                       {tarea.descripcion}
                     </h4>
-                    
+
                     <div className="flex flex-col gap-3 mt-4 pt-4 border-t border-slate-800">
                       <div className="flex items-center justify-between text-slate-300">
                         <div className="flex items-center gap-2">
@@ -183,10 +185,15 @@ const handleScrollToServices = (e: React.MouseEvent<HTMLAnchorElement>) => {
                           <span>{tarea.tiempo_estimado} min</span>
                         </div>
                       </div>
-                      
-                      <Link to="/register" className="mt-2 w-full py-2 text-center text-sm font-medium text-slate-400 hover:text-white bg-slate-800/50 hover:bg-blue-600 rounded-lg transition-all">
+
+                      <a
+                        href={`https://wa.me/3415081979?text=Hola!%20Me%20interesa%20el%20servicio%20de%20${encodeURIComponent(tarea.descripcion)}%20a%20$${tarea.precio}.%20¿Tienen%20disponibilidad?`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-2 w-full py-2 text-center text-sm font-medium text-slate-400 hover:text-white bg-slate-800/50 hover:bg-blue-600 rounded-lg transition-all"
+                      >
                         Reservar este
-                      </Link>
+                      </a>
                     </div>
                   </div>
                 ))}
@@ -198,20 +205,20 @@ const handleScrollToServices = (e: React.MouseEvent<HTMLAnchorElement>) => {
         <section className="relative py-8 overflow-hidden">
           <div className="absolute inset-0 bg-blue-900/20" />
           <div className="absolute inset-0 bg-gradient-to-b from-slate-950 via-transparent to-slate-950" />
-          
+
           <div className="relative z-10 max-w-4xl mx-auto px-4 text-center">
             <h3 className="text-3xl sm:text-5xl font-bold mb-6">¿Listo para transformar tu auto?</h3>
             <p className="text-lg text-slate-300 mb-8">
               Únete a cientos de clientes satisfechos que confían en nosotros para mantener sus vehículos impecables.
             </p>
             <div className="flex flex-col sm:flex-row gap-6 justify-center items-center text-slate-300 mb-8 text-sm">
-                <div className="flex items-center gap-2"><CheckCircle2 className="text-blue-500" size={16}/> Garantía de satisfacción</div>
-                <div className="flex items-center gap-2"><CheckCircle2 className="text-blue-500" size={16}/> Productos biodegradables</div>
-                <div className="flex items-center gap-2"><CheckCircle2 className="text-blue-500" size={16}/> Atención personalizada</div>
+              <div className="flex items-center gap-2"><CheckCircle2 className="text-blue-500" size={16} /> Garantía de satisfacción</div>
+              <div className="flex items-center gap-2"><CheckCircle2 className="text-blue-500" size={16} /> Productos biodegradables</div>
+              <div className="flex items-center gap-2"><CheckCircle2 className="text-blue-500" size={16} /> Atención personalizada</div>
             </div>
           </div>
         </section>
-          <Mapa />
+        <Mapa />
       </main>
 
 
