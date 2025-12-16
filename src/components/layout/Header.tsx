@@ -1,16 +1,15 @@
-import { useNavigate } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { logout } from '../../store/slices/authSlice';
 import { LogOut, User, Bell } from 'lucide-react';
 
 export function Header() {
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { user } = useAppSelector((state) => state.auth);
 
   const handleLogout = () => {
     dispatch(logout());
-    navigate('/');
+    // Usar window.location para forzar recarga completa y evitar race conditions
+    window.location.href = '/';
   };
 
   return (
@@ -42,7 +41,7 @@ export function Header() {
 
           <button
             onClick={handleLogout}
-            className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors text-sm font-medium"
+            className="flex items-center gap-2 bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded-lg transition-colors text-sm font-medium cursor-pointer"
           >
             <LogOut size={18} />
             <span className="hidden sm:inline">Cerrar Sesión</span>
