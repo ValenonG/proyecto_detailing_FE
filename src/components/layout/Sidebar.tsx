@@ -81,29 +81,27 @@ export function Sidebar() {
 
   return (
     <aside
-      className={`bg-slate-800 border-r border-slate-700 transition-all duration-300 ${isCollapsed ? 'w-20' : 'w-64'
+      className={`relative bg-slate-800 border-r border-slate-700 transition-all duration-300 ${isCollapsed ? 'w-20' : 'w-64'
         }`}
     >
       <div className="flex flex-col h-full">
-        <div className="flex items-center justify-between p-4 border-b border-slate-700">
+        <div className="flex items-center justify-between pl-6 h-17 border-b border-slate-700">
           {!isCollapsed && (
             <div className="flex items-center gap-2">
-              <Car className="text-blue-500" size={28} />
-              <h1 className="text-lg font-bold text-white">Auto Detailing</h1>
+              <h1 className="text-lg font-bold text-white">Futura Detailing</h1>
             </div>
           )}
           {isCollapsed && (
             <div className="mx-auto">
-              <Car className="text-blue-500" size={28} />
             </div>
           )}
         </div>
 
         <button
           onClick={() => setIsCollapsed(!isCollapsed)}
-          className="absolute right-0 top-20 transform translate-x-1/2 bg-slate-700 hover:bg-slate-600 text-white rounded-full p-1.5 transition-colors z-10"
+          className="absolute -right-3 top-20 bg-slate-700 hover:bg-slate-600 text-white rounded-full p-1.5 transition-colors z-10 border border-slate-600"
         >
-          {isCollapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
+          {isCollapsed ? <ChevronRight size={14} /> : <ChevronLeft size={16} />}
         </button>
 
         <nav className="flex-1 p-4 overflow-y-auto">
@@ -142,7 +140,7 @@ export function Sidebar() {
         <div className="p-4 border-t border-slate-700">
           {!isCollapsed ? (
             <div className="text-xs text-slate-400 text-center">
-              <p>© 2025 Auto Detailing</p>
+              <p>© 2025 Futura Detailing</p>
             </div>
           ) : (
             <div className="h-4"></div>

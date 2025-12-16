@@ -13,7 +13,7 @@ export function Header() {
   };
 
   return (
-    <header className="bg-slate-800 border-b border-slate-700 h-16">
+    <header className="bg-slate-800 border-b border-slate-700 h-17">
       <div className="h-full px-6 flex items-center justify-between">
         <div className="flex items-center gap-4">
           <h2 className="text-xl font-semibold text-white">Panel de Administración</h2>
