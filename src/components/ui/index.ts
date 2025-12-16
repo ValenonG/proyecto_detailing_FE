@@ -7,3 +7,4 @@ export { Label } from './Label';
 export { ClienteForm } from './ClienteForm';
 export { VehiculoForm } from './VehiculoForm';
 export { default as Mapa } from './Mapa';
+export { ProveedorForm } from './ProveedorForm';

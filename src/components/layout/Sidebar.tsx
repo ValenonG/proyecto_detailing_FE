@@ -9,6 +9,7 @@ import {
   Settings,
   ChevronLeft,
   ChevronRight,
+  Truck,
 } from 'lucide-react';
 import { useState, useMemo } from 'react';
 import { useAppSelector } from '../../store/hooks';
@@ -28,6 +29,12 @@ const menuItems: MenuItem[] = [
     label: 'Dashboard',
     path: '/dashboard',
     allowedRoles: ['Cliente', 'Empleado', 'Administrador', 'Proveedor']
+  },
+  {
+    icon: Truck,
+    label: 'Proveedores',
+    path: '/dashboard/proveedores',
+    allowedRoles: ['Empleado', 'Administrador']
   },
   {
     icon: Users,

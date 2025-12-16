@@ -4,6 +4,7 @@ import clienteReducer from './slices/clienteSlice';
 import vehiculoReducer from './slices/vehiculoSlice';
 import trabajosReducer from './slices/trabajosSlice';
 import productosReducer from './slices/productosSlice';
+import proveedorReducer from './slices/proveedorSlice';
 
 export const store = configureStore({
   reducer: {
@@ -12,6 +13,7 @@ export const store = configureStore({
     vehiculo: vehiculoReducer,
     trabajos: trabajosReducer,
     productos: productosReducer,
+    proveedor: proveedorReducer,
   },
 });
 
