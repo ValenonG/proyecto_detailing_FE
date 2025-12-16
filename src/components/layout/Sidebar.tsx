@@ -66,12 +66,6 @@ const menuItems: MenuItem[] = [
     path: '/dashboard/servicios',
     allowedRoles: ['Empleado', 'Administrador']
   },
-  {
-    icon: Settings,
-    label: 'Configuración',
-    path: '/dashboard/config',
-    allowedRoles: ['Administrador']
-  },
 ];
 
 export function Sidebar() {
