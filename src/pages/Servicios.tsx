@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import { DashboardLayout } from '../components';
 import { Table } from '../components/ui/Table';
-import { Button } from '../components/ui/Button';
 import { Modal, ConfirmModal } from '../components/ui/Modal';
 import { Plus, Edit, CheckCircle, XCircle } from 'lucide-react';
 import { tareaService } from '../services/tareaService';
@@ -122,21 +121,34 @@ export function Servicios() {
       title: 'Acciones',
       render: (_: any, tarea: Tarea) => (
         <div className="flex gap-2">
-          <Button variant="ghost" size="sm" onClick={(e) => { e.stopPropagation(); handleEditClick(tarea); }}>
-            <Edit className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={(e) => { e.stopPropagation(); handleDeleteClick(tarea); }}
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              handleEditClick(tarea);
+            }}
+            className="p-2 text-blue-400 hover:text-blue-300 hover:bg-blue-500/10 rounded transition-colors"
+            title="Editar"
+          >
+            <Edit size={18} />
+          </button>
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              handleDeleteClick(tarea);
+            }}
+            className={`p-2 rounded transition-colors ${
+              tarea.isActive 
+                ? 'text-red-400 hover:text-red-300 hover:bg-red-500/10' 
+                : 'text-green-400 hover:text-green-300 hover:bg-green-500/10'
+            }`}
             title={tarea.isActive ? 'Desactivar servicio' : 'Activar servicio'}
           >
             {tarea.isActive ? (
-              <XCircle className="h-4 w-4 text-red-500" />
+              <XCircle size={18} />
             ) : (
-              <CheckCircle className="h-4 w-4 text-green-500" />
+              <CheckCircle size={18} />
             )}
-          </Button>
+          </button>
         </div>
       ),
     },
@@ -147,10 +159,13 @@ export function Servicios() {
       <div className="space-y-6">
         <div className="flex justify-between items-center">
           <h1 className="text-3xl font-bold text-white">Gestión de Servicios</h1>
-          <Button onClick={handleCreateClick} className="flex items-center gap-2">
-            <Plus className="h-5 w-5" />
+          <button
+            onClick={handleCreateClick}
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+          >
+            <Plus size={20} />
             <span>Crear Servicio</span>
-          </Button>
+          </button>
         </div>
 
         <Table
@@ -202,12 +217,19 @@ export function Servicios() {
             {errors.tiempo_estimado && <p className="text-red-500 text-sm mt-1">{errors.tiempo_estimado.message}</p>}
           </div>
           <div className="flex justify-end gap-3 pt-4">
-            <Button type="button" variant="outline" onClick={() => setIsModalOpen(false)}>
+            <button
+              type="button"
+              onClick={() => setIsModalOpen(false)}
+              className="px-4 py-2 text-slate-300 hover:text-white hover:bg-slate-700 rounded-lg transition-colors"
+            >
               Cancelar
-            </Button>
-            <Button type="submit">
+            </button>
+            <button
+              type="submit"
+              className="px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-lg transition-colors"
+            >
               {selectedTarea ? 'Guardar Cambios' : 'Crear Servicio'}
-            </Button>
+            </button>
           </div>
         </form>
       </Modal>

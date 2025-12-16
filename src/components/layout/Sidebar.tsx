@@ -6,7 +6,6 @@ import {
   Wrench,
   Package,
   FileText,
-  Settings,
   ChevronLeft,
   ChevronRight,
   Truck,
@@ -65,12 +64,6 @@ const menuItems: MenuItem[] = [
     label: 'Servicios',
     path: '/dashboard/servicios',
     allowedRoles: ['Empleado', 'Administrador']
-  },
-  {
-    icon: Settings,
-    label: 'Configuración',
-    path: '/dashboard/config',
-    allowedRoles: ['Administrador']
   },
 ];
 
