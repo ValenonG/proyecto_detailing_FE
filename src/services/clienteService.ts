@@ -17,11 +17,12 @@ export const clienteService = {
     },
 
     create: async (clienteData: CreateClienteRequest): Promise<Cliente> => {
-        const response = await api.post('/persona', {
+        const response = await api.post('/persona/register', {
             ...clienteData,
             tipo: 'Cliente',
+            password: 'defaultPassword123'
         });
-        return response.data;
+        return response.data.persona;
     },
 
     update: async (id: string, clienteData: UpdateClienteRequest): Promise<Cliente> => {
